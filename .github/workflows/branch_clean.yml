@@ -19,7 +19,7 @@ jobs:
           HEAD: ${{ github.head_ref }}
 
       - name: JudCoCo
-        uses: MeilleursAgents/JudCoCo@first_version
+        uses: MeilleursAgents/JudCoCo@master
         with:
           base: origin/${{ github.base_ref }}
           head: origin/${{ github.head_ref }}
