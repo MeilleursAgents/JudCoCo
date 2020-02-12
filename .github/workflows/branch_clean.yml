@@ -1,20 +1,3 @@
-# JudCoCo
-
-Judge of Conventional Commit - Write better commit description
-
-## Inputs
-
-### `base`
-
-**Required** The base branch used for git comparison. Default `"master"`.
-
-### `head`
-
-**Required** The HEAD ref used for git comparison, you current branch
-
-## Example usage
-
-```yaml
 ---
 
 name: Git
@@ -36,8 +19,7 @@ jobs:
           HEAD: ${{ github.head_ref }}
 
       - name: JudCoCo
-        uses: MeilleursAgents/JudCoCo@master
+        uses: MeilleursAgents/JudCoCo@first_version
         with:
           base: origin/${{ github.base_ref }}
           head: origin/${{ github.head_ref }}
-```

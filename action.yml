@@ -1,0 +1,18 @@
+---
+
+name: 'JudCoCo'
+description: 'Judge of Conventional Commit - Write better commit description 🥤🥥'
+inputs:
+  base:
+    description: "Base branch"
+    default: "master"
+    required: true
+  head:
+    description: "HEAD to check diff"
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.base }}
+    - ${{ inputs.head }}
