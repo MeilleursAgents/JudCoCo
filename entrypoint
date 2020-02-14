@@ -21,9 +21,18 @@ git_conventionnal_commits() {
   CONVENTIONAL_COMMIT_SCOPES['test']='A new test or correcting existing tests'
 }
 
+git_is_merge_commit() {
+  if [[ ${1} =~ Merge\ (pull\ request|branch) ]]; then
+    printf "true"
+  else
+    printf "false"
+  fi
+}
+
 git_is_commit_wip() {
   if [[ ${1} =~ ^fixup\! ]]; then
     printf "true"
+    return
   fi
 
   local WIP_REGEX="\\bwip\\b"
@@ -33,6 +42,8 @@ git_is_commit_wip() {
 
   if [[ ${1} =~ ${WIP_REGEX} ]]; then
     printf "true"
+  else
+    printf "false"
   fi
 }
 
@@ -66,19 +77,24 @@ main() {
   for commit in $(git log --pretty=format:'%s' "${BASE}..${HEAD}"); do
     printf "%bAnalyzing %b%s%b\n" "${BLUE}" "${YELLOW}" "${commit}" "${RESET}"
 
+    if [[ $(git_is_merge_commit "${commit}") == "true" ]]; then
+      printf "\t%bmerge commit, ignoring%b\n" "${BLUE}" "${RESET}"
+      continue
+    fi
+
     if [[ $(git_is_commit_wip "${commit}") == "true" ]]; then
-      printf "\t %bwip commit, please rebase%b\n" "${RED}" "${RESET}"
+      printf "\t%bwip commit, please rebase%b\n" "${RED}" "${RESET}"
       UNCLEAR="true"
       continue
     fi
 
     if [[ $(git_is_conventional_commit "${commit}") != "true" ]]; then
-      printf "\t %bnot a conventional commit, please reword%b\n" "${RED}" "${RESET}"
+      printf "\t%bnot a conventional commit, please reword%b\n" "${RED}" "${RESET}"
       UNCLEAR="true"
     fi
 
     if [[ $(git_is_valid_description "${commit}") != "true" ]]; then
-      printf "\t %btoo long, please reword%b\n" "${RED}" "${RESET}"
+      printf "\t%btoo long, please reword%b\n" "${RED}" "${RESET}"
       UNCLEAR="true"
     fi
   done
