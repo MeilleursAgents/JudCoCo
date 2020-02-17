@@ -40,6 +40,7 @@ commit_message_guidelines() {
 git_is_commit_wip() {
   if [[ ${1} =~ ^fixup\! ]]; then
     printf "true"
+    return
   fi
 
   local WIP_REGEX="\\bwip\\b"
@@ -49,6 +50,8 @@ git_is_commit_wip() {
 
   if [[ ${1} =~ ${WIP_REGEX} ]]; then
     printf "true"
+  else
+    printf "false"
   fi
 }
 
@@ -89,8 +92,6 @@ main() {
     commit_message_guidelines
     exit 1
   fi
-
-  exit 0
 
   exit 0
 }
