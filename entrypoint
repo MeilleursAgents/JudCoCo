@@ -74,6 +74,8 @@ main() {
   local UNCLEAR="false"
   IFS=$'\n'
 
+  printf "%bComparing %b%s%b and %b%s%b\n" "${BLUE}" "${YELLOW}" "${BASE}" "${BLUE}" "${YELLOW}" "${HEAD}" "${RESET}"
+
   for commit in $(git log --pretty=format:'%s' "${BASE}..${HEAD}"); do
     printf "%bAnalyzing %b%s%b\n" "${BLUE}" "${YELLOW}" "${commit}" "${RESET}"
 
@@ -89,7 +91,7 @@ main() {
     fi
 
     if [[ $(git_is_conventional_commit "${commit}") != "true" ]]; then
-      printf "\t%bnot a conventional commit, please reword according to %bconventionalcommits.org/en/v1.0.0/#specification%b\n" "${RED}" "${YELLOW}" "${RESET}"
+      printf "\t%bnot a conventional commit, please reword according to %bconventionalcommits.org/en/v1.0.0/#specification%b\n" "${RED}" "${GREEN}" "${RESET}"
       UNCLEAR="true"
     fi
 
