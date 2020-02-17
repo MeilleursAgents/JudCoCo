@@ -89,12 +89,12 @@ main() {
     fi
 
     if [[ $(git_is_conventional_commit "${commit}") != "true" ]]; then
-      printf "\t%bnot a conventional commit, please reword%b\n" "${RED}" "${RESET}"
+      printf "\t%bnot a conventional commit, please reword according to %bconventionalcommits.org/en/v1.0.0/#specification%b\n" "${RED}" "${YELLOW}" "${RESET}"
       UNCLEAR="true"
     fi
 
     if [[ $(git_is_valid_description "${commit}") != "true" ]]; then
-      printf "\t%btoo long, please reword%b\n" "${RED}" "${RESET}"
+      printf "\t%btoo long, please reword below 70 characters%b\n" "${RED}" "${RESET}"
       UNCLEAR="true"
     fi
   done
