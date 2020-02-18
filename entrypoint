@@ -49,7 +49,7 @@ git_is_commit_wip() {
 
 git_is_conventional_commit() {
   shopt -s nocasematch
-  if [[ ${1} =~ ^(revert:\ )?($(IFS='|'; echo "${!CONVENTIONAL_COMMIT_SCOPES[*]}"))(\(.+\))?\!?:\ [a-zA-Z0-9]+ ]]; then
+  if [[ ${1} =~ ^(revert:\ )?($(IFS='|'; echo "${!CONVENTIONAL_COMMIT_SCOPES[*]}"))(\(.+\))?\!?:\ [a-zA-Z0-9()[\]]+ ]]; then
     printf "true"
   else
     printf "false"
