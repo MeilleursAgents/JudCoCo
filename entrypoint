@@ -57,7 +57,7 @@ git_is_conventional_commit() {
 }
 
 git_is_valid_description() {
-  if [[ ${1} =~ ^.{1,70}$ ]]; then
+  if [[ ${1} =~ ^.{1,${DESCRIPTION_MAX_LENGTH}}$ ]]; then
     printf "true"
   else
     printf "false"
@@ -67,6 +67,8 @@ git_is_valid_description() {
 main() {
   var_color
   git_conventionnal_commits
+
+  local DESCRIPTION_MAX_LENGTH="70"
 
   local BASE="${1:-master}"
   local HEAD="${2:-$(git rev-parse --abbrev-ref HEAD)}"
@@ -96,7 +98,7 @@ main() {
     fi
 
     if [[ $(git_is_valid_description "${commit}") != "true" ]]; then
-      printf "\t%btoo long, please reword below 70 characters%b\n" "${RED}" "${RESET}"
+      printf "\t%btoo long, please reword below %d characters%b\n" "${RED}" "${DESCRIPTION_MAX_LENGTH}" "${RESET}"
       UNCLEAR="true"
     fi
   done
