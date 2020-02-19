@@ -34,7 +34,7 @@ conventionnal_commit_guidelines() {
 }
 
 commit_message_guidelines() {
-  printf "\n%bYou have to use a short commit description (max 80 characters)%b\n\n" "${YELLOW}" "${RESET}"
+  printf "\n%bYou have to use a short commit description (max %d characters)%b\n\n" "${YELLOW}" "${DESCRIPTION_MAX_LENGTH}" "${RESET}"
 }
 
 git_is_commit_wip() {
@@ -65,7 +65,7 @@ git_is_conventional_commit() {
 }
 
 git_is_valid_description() {
-  if [[ ${1} =~ ^.{1,70}$ ]]; then
+  if [[ ${1} =~ ^.{1,${DESCRIPTION_MAX_LENGTH}}$ ]]; then
     printf "true"
   else
     printf "false"
@@ -75,6 +75,8 @@ git_is_valid_description() {
 main() {
   var_color
   git_conventionnal_commits
+
+  local DESCRIPTION_MAX_LENGTH="70"
 
   local FIRST_LINE
   FIRST_LINE="$(head -1 "${1}")"
