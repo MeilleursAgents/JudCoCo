@@ -34,7 +34,7 @@ conventionnal_commit_guidelines() {
 }
 
 commit_message_guidelines() {
-  printf "\n%bYou have to use a short commit description (max %d characters)%b\n\n" "${YELLOW}" "${DESCRIPTION_MAX_LENGTH}" "${RESET}"
+  printf "%bYou have to use a short commit description (max %d characters)%b\n\n" "${YELLOW}" "${DESCRIPTION_MAX_LENGTH}" "${RESET}"
 }
 
 git_is_commit_wip() {
@@ -72,6 +72,15 @@ git_is_valid_description() {
   fi
 }
 
+handle_failed_check() {
+  if [[ -z ${ENFORCE_CONVENTIONAL_COMMITS:-} ]]; then
+    exit 0
+  fi
+
+  printf '%b+-------------------------+\n| Commit has been aborted |\n+-------------------------+%b\n' "${RED}" "${RESET}"
+  exit 1
+}
+
 main() {
   var_color
   git_conventionnal_commits
@@ -87,12 +96,12 @@ main() {
 
   if [[ $(git_is_conventional_commit "${FIRST_LINE}") != "true" ]]; then
     conventionnal_commit_guidelines
-    exit 1
+    handle_failed_check
   fi
 
   if [[ $(git_is_valid_description "${FIRST_LINE}") != "true" ]]; then
     commit_message_guidelines
-    exit 1
+    handle_failed_check
   fi
 
   exit 0
