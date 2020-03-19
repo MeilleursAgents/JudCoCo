@@ -98,7 +98,7 @@ main() {
     fi
 
     if [[ $(git_is_valid_description "${commit}") != "true" ]]; then
-      printf "\t%btoo long, please reword below %d characters%b\n" "${RED}" "${DESCRIPTION_MAX_LENGTH}" "${RESET}"
+      printf "\t%btoo long, please reword below %d characters, %bcurrently %d%b\n" "${RED}" "${DESCRIPTION_MAX_LENGTH}" "${YELLOW}" "${#commit}" "${RESET}"
       UNCLEAR="true"
     fi
   done
