@@ -1,6 +1,6 @@
 FROM alpine
 
 ENTRYPOINT ["/entrypoint"]
-RUN apk add --update git bash
+RUN apk add --no-cache --update git bash
 
 COPY entrypoint /
