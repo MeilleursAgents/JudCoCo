@@ -16,3 +16,13 @@ help: Makefile
 .PHONY: init
 init:
 	@tools/install_hooks
+
+.PHONY: build
+build:
+	docker build -t meilleursagentstech/judcoco:latest .
+
+.PHONY: release
+release:
+	docker login -u meilleurs4gents
+	docker push --disable-content-trust meilleursagentstech/judcoco:latest
+	docker logout
