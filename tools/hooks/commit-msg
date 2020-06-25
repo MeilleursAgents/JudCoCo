@@ -75,6 +75,14 @@ git_is_valid_description() {
   fi
 }
 
+git_is_safe_description() {
+  if [[ ${1} =~ " " ]]; then
+    printf "false"
+  else
+    printf "true"
+  fi
+}
+
 handle_failed_check() {
   if [[ -z ${ENFORCE_CONVENTIONAL_COMMITS:-} ]]; then
     exit 0
@@ -95,6 +103,11 @@ main() {
 
   if [[ $(git_is_commit_wip "${FIRST_LINE}") == "true" ]]; then
     exit 0
+  fi
+
+  if [[ $(git_is_safe_description "${FIRST_LINE}") != "true" ]]; then
+    printf "%bDon't use non-breaking space in your message%b\n\n" "${YELLOW}" "${RESET}"
+    handle_failed_check
   fi
 
   if [[ $(git_is_conventional_commit "${FIRST_LINE}") != "true" ]]; then
