@@ -67,6 +67,14 @@ git_is_valid_description() {
   fi
 }
 
+git_is_safe_description() {
+  if [[ ${1} =~ " " ]]; then
+    printf "false"
+  else
+    printf "true"
+  fi
+}
+
 main() {
   var_color
   git_conventionnal_commits
@@ -102,6 +110,11 @@ main() {
 
     if [[ $(git_is_valid_description "${commit}") != "true" ]]; then
       printf "\t%btoo long, please reword below %d characters, %bcurrently %d%b\n" "${RED}" "${DESCRIPTION_MAX_LENGTH}" "${YELLOW}" "${#commit}" "${RESET}"
+      UNCLEAR="true"
+    fi
+
+    if [[ $(git_is_safe_description "${commit}") != "true" ]]; then
+      printf "\t%bcommit with non-breaking space%b\n" "${RED}" "${RESET}"
       UNCLEAR="true"
     fi
   done
