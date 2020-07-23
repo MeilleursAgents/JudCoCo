@@ -88,7 +88,12 @@ handle_failed_check() {
     exit 0
   fi
 
-  printf '%b+-------------------------+\n| Commit has been aborted |\n+-------------------------+%b\n' "${RED}" "${RESET}"
+  printf '%b+------------------------------------------+\n| Commit has been aborted. Commit message: |%b\n' "${RED}" "${RESET}"
+
+  printf '%b+------------------------------------------+---------------------------+%b\n' "${RED}" "${RESET}"
+  printf "%s\n" "${COMMIT_MSG}"
+  printf '%b+----------------------------------------------------------------------+%b\n' "${RED}" "${RESET}"
+
   exit 1
 }
 
@@ -102,6 +107,9 @@ main() {
 
   local FIRST_LINE
   FIRST_LINE="$(head -1 "${1}")"
+
+  local COMMIT_MSG
+  COMMIT_MSG="$(cat "${1}")"
 
   if [[ $(git_is_commit_wip "${FIRST_LINE}") == "true" ]]; then
     exit 0
