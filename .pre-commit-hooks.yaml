@@ -1,0 +1,15 @@
+---
+
+- id: prepare-commit-msg
+  name: JudCoCo prepare
+  description: Use 'JudCoCo' help to write commit messages
+  entry: ./tools/hooks/prepare-commit-msg
+  language: script
+  stages: [prepare-commit-msg]
+
+- id: check-commit-msg
+  name: JudCoCo check
+  description: Run 'JudCoCo' for commit policy enforcement
+  entry: ./tools/hooks/commit-msg
+  language: script
+  stages: [commit-msg]
