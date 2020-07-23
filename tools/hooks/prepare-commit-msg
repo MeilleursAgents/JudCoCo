@@ -70,16 +70,20 @@ main() {
     exit 0
   fi
 
-  if [[ -n ${BRANCH_NAME} && ${BRANCH_NAME} =~ (feature|fixe)s?/([A-Z0-9]+[-_][0-9]+) ]]; then
-    local PREFIX="${BASH_REMATCH[2]}"
+  if [[ ! ${FIRST_LINE} =~ ([A-Z0-9]+[-_][0-9]+) ]]; then
 
-    if [[ ! ${FIRST_LINE} =~ ${PREFIX} ]]; then
-      if [[ $(git_is_conventional_commit "${FIRST_LINE}") == "true" ]]; then
-        perl -pi'' -e "s|^(revert:\ )?($(printf "%s\|" "${!CONVENTIONAL_COMMIT_SCOPES[@]}"))(\(.+\))?(\!?):|\1\2\3\4: ${PREFIX}|" "${1}"
-      else
-        sed_inplace -e "1s|^|${PREFIX} |" "${1}"
+    if [[ -n ${BRANCH_NAME} && ${BRANCH_NAME} =~ (feature|fixe)s?/([A-Z0-9]+[-_][0-9]+) ]]; then
+      local PREFIX="${BASH_REMATCH[2]}"
+
+      if [[ ! ${FIRST_LINE} =~ ${PREFIX} ]]; then
+        if [[ $(git_is_conventional_commit "${FIRST_LINE}") == "true" ]]; then
+          perl -pi'' -e "s|^(revert:\ )?($(printf "%s\|" "${!CONVENTIONAL_COMMIT_SCOPES[@]}"))(\(.+\))?(\!?):|\1\2\3\4: ${PREFIX}|" "${1}"
+        else
+          sed_inplace -e "1s|^|${PREFIX} |" "${1}"
+        fi
       fi
     fi
+
   fi
 
   exit 0
