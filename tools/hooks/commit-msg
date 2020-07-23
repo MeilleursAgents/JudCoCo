@@ -84,7 +84,7 @@ git_is_safe_description() {
 }
 
 handle_failed_check() {
-  if [[ -z ${ENFORCE_CONVENTIONAL_COMMITS:-} ]]; then
+  if [[ ${ENFORCE_CONVENTIONAL_COMMITS:-true} != "true" ]]; then
     exit 0
   fi
 
@@ -95,6 +95,8 @@ handle_failed_check() {
 main() {
   var_color
   git_conventionnal_commits
+
+  local ENFORCE_CONVENTIONAL_COMMITS=${ENFORCE_CONVENTIONAL_COMMITS:-true}
 
   local DESCRIPTION_MAX_LENGTH="70"
 
